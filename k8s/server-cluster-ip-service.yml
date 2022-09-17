@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: server
+  ports:
+    - port: 5000  # how other pods/objects in the cluster connects to multi-server pods
+      targetPort: 5000 # port for actual multi-server container

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec: #deployment config
+  replicas: 1 # In case of postgres we can not just increase replicas, otherwise it may use same file system which can create issues
+  selector:
+    matchLabels:
+      component: postgres
+  template:
+    metadata: 
+      labels:
+        component: postgres
+    spec:
+      volumes:  #for long time persistent storage outside of pod 
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: database-persistent-volume-claim
+      containers:
+        - name: postgres
+          image: postgres:12.10
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD
+          ports:
+            - containerPort: 5432
+          volumeMounts: # mount the volume defined under spec to the container
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data # data directory of postgres where postgres keeps data
+              subPath: postgres # data from mountPath will be stored at a folder named in subPath in the persistent volume
