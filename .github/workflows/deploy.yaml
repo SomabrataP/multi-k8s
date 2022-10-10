@@ -28,12 +28,12 @@ jobs:
        uses: 'google-github-actions/auth@v0'
        with:
          workload_identity_provider: 'projects/764668127582/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-         service_account: 'k8s-service-account@multi-k8s-363605.iam.gserviceaccount.com'
+         service_account: 'github-action-deployer@multi-k8s-363605.iam.gserviceaccount.com'
  
      - name: Set Project
        uses: google-github-actions/setup-gcloud@v0
        with:
-         project_id: multi-k8s
+         project_id: multi-k8s-363605
  
      - name: Auth
        run: |-
